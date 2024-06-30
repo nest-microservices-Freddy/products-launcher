@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   nats-server:
     image: nats:latest
@@ -60,12 +58,13 @@ services:
   payments-ms:
     container_name: payments-ms
     build: ./payments-ms
-    ports:
-      - "3003:3003"
     volumes:
       - ./payments-ms/src:/usr/src/app/src
     command: npm run start:dev
     environment:
-      - PORT=3003
+      - PORT=${PAYMENTS_MS_PORT}
       - NATS_SERVERS=nats://nats-server:4222
-
+      - STRIPE_SECRET=${PAYMENTS_STRIPE_SECRET}
+      - STRIPE_ENDPOINT_SECRET=${PAYMENTS_STRIPE_ENDPOINT_SECRET}
+      - SUCCESS_URL=${PAYMENTS_SUCCESS_URL}
+      - CANCEL_URL=${PAYMENTS_CANCEL_URL}
